@@ -1,13 +1,19 @@
-import Person from "./Person";
+const Persons = ({ persons, filter, deletePerson }) => {
+  if (!persons) return;
 
-const Persons = ({ persons, removePerson }) => {
+  const personsToShow =
+    filter === ""
+      ? persons
+      : persons.filter((person) => person.name.toLowerCase().includes(filter));
+
   return (
     <>
-      {persons.map((person) => {
-        return (
-          <Person key={person.id} person={person} removePerson={removePerson} />
-        );
-      })}
+      {personsToShow.map((person) => (
+        <p key={person.name}>
+          {person.name} {person.number}{" "}
+          <button onClick={() => deletePerson(person)}>delete</button>
+        </p>
+      ))}
     </>
   );
 };
