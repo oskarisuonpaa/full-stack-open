@@ -99,10 +99,10 @@ describe("blogs api", () => {
         .expect("Content-Type", /application\/json/);
     });
 
-    test("is not saved to database if url is not provided", async () => {
+    test("is not saved to database if author is not provided", async () => {
       const blog = {
         title: "Test",
-        author: "Test",
+        url: "Test",
         likes: 0,
       };
 
