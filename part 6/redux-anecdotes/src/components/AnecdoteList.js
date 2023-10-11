@@ -8,9 +8,11 @@ const AnecdoteList = () => {
   const dispatch = useDispatch();
 
   const vote = (anecdote) => {
-    dispatch(voteAnecdote(anecdote.id));
+    dispatch(voteAnecdote(anecdote));
     dispatch(setNotification(`you voted '${anecdote.content}'`, 5));
   };
+
+  console.log(anecdotes);
 
   const anecdotesToShow = anecdotes.filter((anecdote) =>
     anecdote.content.toLowerCase().includes(filter.toLowerCase())
