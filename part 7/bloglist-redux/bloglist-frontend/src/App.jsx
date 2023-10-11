@@ -6,12 +6,15 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
+import { useDispatch } from "react-redux";
+import { setNotification } from "./reducers/notificationReducer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({ type: "", message: "" });
   const blogFormRef = useRef();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     blogService
@@ -41,7 +44,7 @@ const App = () => {
 
   const handleLike = async (id, blogObject) => {
     await blogService.update(id, blogObject);
-    updateBlogData;
+    updateBlogData();
   };
 
   const createBlog = async (newBlog) => {
@@ -49,30 +52,27 @@ const App = () => {
       const blog = await blogService.create(newBlog);
       blogFormRef.current.toggleVisibility();
       setBlogs(blogs.concat(blog));
-      updateBlogData;
-      notify(`a new blog ${blog.title} by ${blog.author}`);
+      updateBlogData();
+      dispatch(
+        setNotification({
+          message: `a new blog ${blog.title} by ${blog.author}`,
+          type: "info",
+        })
+      );
     } catch (exception) {
-      notify("title and author are required", "error");
+      dispatch(
+        setNotification({
+          message: "title and author are required",
+          type: "error",
+        })
+      );
     }
-  };
-
-  const notify = (message, type = "success") => {
-    setNotification({ type, message });
-
-    setTimeout(() => {
-      setNotification({ type: "", message: "" });
-    }, 3000);
   };
 
   if (!user) {
     return (
       <div>
-        <LoginForm
-          notification={notification}
-          notify={notify}
-          user={user}
-          setUser={setUser}
-        />
+        <LoginForm user={user} setUser={setUser} />
       </div>
     );
   }
@@ -80,7 +80,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification notification={notification} />
+      <Notification />
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
