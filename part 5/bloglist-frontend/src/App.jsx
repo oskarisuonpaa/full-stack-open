@@ -33,6 +33,21 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
   };
 
+  const handleLike = async (id, blogObject) => {
+    await blogService.update(id, blogObject);
+  };
+
+  const createBlog = async (newBlog) => {
+    try {
+      const blog = await blogService.create(newBlog);
+      blogFormRef.current.toggleVisibility();
+      setBlogs(blogs.concat(blog));
+      notify(`a new blog ${blog.title} by ${blog.author}`);
+    } catch (exception) {
+      notify("title and author are required", "error");
+    }
+  };
+
   const notify = (message, type = "success") => {
     setNotification({ type, message });
 
@@ -62,15 +77,10 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm
-          blogFormRef={blogFormRef}
-          notify={notify}
-          blogs={blogs}
-          setBlogs={setBlogs}
-        />
+        <BlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog key={blog.id} blog={blog} user={user} handleLike={handleLike} />
       ))}
     </div>
   );

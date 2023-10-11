@@ -2,26 +2,17 @@ import { useState } from "react";
 
 import blogService from "../services/blogs";
 
-const BlogForm = ({ blogFormRef, notify, blogs, setBlogs }) => {
+const BlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
   const addBlog = async (event) => {
     event.preventDefault();
-
-    try {
-      const blog = await blogService.create({ title, author, url });
-
-      blogFormRef.current.toggleVisibility();
-      setBlogs(blogs.concat(blog));
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-      notify(`a new blog ${blog.title} by ${blog.author}`);
-    } catch (exception) {
-      notify("title and author are required", "error");
-    }
+    createBlog({ title, author, url });
+    setTitle("");
+    setAuthor("");
+    setUrl("");
   };
 
   return (
@@ -30,6 +21,7 @@ const BlogForm = ({ blogFormRef, notify, blogs, setBlogs }) => {
       <form onSubmit={addBlog}>
         title{" "}
         <input
+          id="title"
           type="text"
           value={title}
           name="Title"
@@ -38,6 +30,7 @@ const BlogForm = ({ blogFormRef, notify, blogs, setBlogs }) => {
         <br />
         author{" "}
         <input
+          id="author"
           type="text"
           value={author}
           name="Author"
@@ -46,6 +39,7 @@ const BlogForm = ({ blogFormRef, notify, blogs, setBlogs }) => {
         <br />
         url{" "}
         <input
+          id="url"
           type="text"
           value={url}
           name="Url"

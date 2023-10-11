@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const PORT = process.env.PORT;
+
 const SECRET =
   process.env.NODE_ENV === "test"
     ? process.env.TEST_SECRET

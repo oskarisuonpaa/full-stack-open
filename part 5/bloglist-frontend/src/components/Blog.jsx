@@ -2,23 +2,11 @@ import { useState } from "react";
 
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, handleLike }) => {
   const [showAll, setShowAll] = useState(false);
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
-  };
-
-  const handleLike = async () => {
-    const blogObject = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id,
-    };
-
-    await blogService.update(blog.id, blogObject);
   };
 
   const handleDelete = async () => {
@@ -36,28 +24,37 @@ const Blog = ({ blog, user }) => {
     marginBottom: 5,
   };
 
-  if (showAll) {
-    return (
-      <div style={blogStyle}>
-        <p>
-          {blog.title} {blog.author}{" "}
-          <button onClick={toggleShowAll}>hide</button>
-        </p>
-        <p>{blog.url}</p>
-        <p>
-          {blog.likes} <button onClick={handleLike}>like</button>{" "}
-        </p>
-        <p>{blog.user.name}</p>
-        {blog.user.username === user.username && (
-          <button onClick={handleDelete}>remove</button>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={toggleShowAll}>view</button>
+    <div className="blog" style={blogStyle}>
+      {blog.title} {blog.author}{" "}
+      <button id="toggle-button" onClick={toggleShowAll}>
+        {showAll ? "hide" : "show"}
+      </button>
+      {showAll && (
+        <div id="blog-details">
+          <a href={blog.url}>{blog.url}</a> <br />
+          likes {blog.likes}{" "}
+          <button
+            id="like-button"
+            onClick={() =>
+              handleLike(blog.id, {
+                title: blog.title,
+                author: blog.author,
+                url: blog.url,
+                likes: blog.likes + 1,
+                user: blog.user.id,
+              })
+            }>
+            like
+          </button>
+          <br />
+          {blog.user.name}
+          <br />
+          {blog.user.username === user.username && (
+            <button onClick={handleDelete}>remove</button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

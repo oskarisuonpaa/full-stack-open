@@ -31,6 +31,7 @@ const LoginForm = ({ notify, notification, user, setUser }) => {
       <form onSubmit={handleLogin}>
         username{" "}
         <input
+          id="username"
           type="text"
           value={username}
           name="Username"
@@ -39,13 +40,16 @@ const LoginForm = ({ notify, notification, user, setUser }) => {
         <br />
         password{" "}
         <input
+          id="password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
         <br />
-        <button type="submit">login</button>
+        <button id="login-button" type="submit">
+          login
+        </button>
       </form>
     </div>
   );
