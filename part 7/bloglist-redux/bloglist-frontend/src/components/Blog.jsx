@@ -1,20 +1,25 @@
 import { useState } from "react";
 
-import blogService from "../services/blogs";
+import { useDispatch } from "react-redux";
+import { likeBlog, removeBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, user, handleLike, updateBlogData }) => {
+const Blog = ({ blog, user }) => {
   const [showAll, setShowAll] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       return;
     }
-    await blogService.remove(blog.id);
-    updateBlogData();
+    dispatch(removeBlog(blog.id));
+  };
+
+  const handleLike = () => {
+    dispatch(likeBlog(blog));
   };
 
   const blogStyle = {

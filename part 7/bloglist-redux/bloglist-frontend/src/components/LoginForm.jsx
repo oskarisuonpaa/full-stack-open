@@ -1,41 +1,28 @@
 import { useState } from "react";
 
 import Notification from "./Notification";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
-import { useDispatch } from "react-redux";
-import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../reducers/userReducer";
 
-const LoginForm = ({ notification, setUser }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const handleLogin = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
 
-    try {
-      const user = await loginService.login({ username, password });
-
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      dispatch(
-        setNotification({
-          message: "wrong username or password",
-          type: "error",
-        })
-      );
-    }
+    dispatch(loginUser({ username, password }));
+    window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
+    setUsername("");
+    setPassword("");
   };
 
   return (
     <div>
       <h2>log in to application</h2>
-      <Notification notification={notification} />
+      <Notification />
       <form onSubmit={handleLogin}>
         username{" "}
         <input

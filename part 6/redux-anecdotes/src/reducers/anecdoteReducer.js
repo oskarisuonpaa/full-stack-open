@@ -36,7 +36,7 @@ export const initializeAnecdotes = () => {
 
 export const createAnecdote = (content) => {
   return async (dispatch) => {
-    const newAnecdote = await anecdotesService.createNew(content);
+    const newAnecdote = await anecdotesService.createNew({ content, votes: 0 });
     dispatch(appendAnecdote(newAnecdote));
   };
 };

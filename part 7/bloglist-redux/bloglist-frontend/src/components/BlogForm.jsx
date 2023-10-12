@@ -1,22 +1,35 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import Togglable from "./Togglable";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
-import blogService from "../services/blogs";
-
-const BlogForm = ({ createBlog }) => {
+const BlogForm = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const toggleableRef = useRef();
+  const dispatch = useDispatch();
 
   const addBlog = async (event) => {
     event.preventDefault();
-    createBlog({ title, author, url });
+
     setTitle("");
     setAuthor("");
     setUrl("");
+
+    dispatch(createBlog({ title, author, url }));
+    dispatch(
+      setNotification({
+        message: `a new blog ${title} by ${author}`,
+        type: "info",
+      })
+    );
+    toggleableRef.current.toggleVisibility();
   };
 
   return (
-    <div>
+    <Togglable buttonLabel="new blog" ref={toggleableRef}>
       <h2>add a new</h2>
       <form onSubmit={addBlog}>
         title{" "}
@@ -48,7 +61,7 @@ const BlogForm = ({ createBlog }) => {
         <br />
         <button type="submit">create</button>
       </form>
-    </div>
+    </Togglable>
   );
 };
 
