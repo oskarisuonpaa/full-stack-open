@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { commentBlog, likeBlog, removeBlog } from "../reducers/blogReducer";
+import { useParams } from "react-router-dom";
+import { Button, Form } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 
-import { useDispatch } from "react-redux";
-import { likeBlog, removeBlog } from "../reducers/blogReducer";
-
-const Blog = ({ blog, user }) => {
-  const [showAll, setShowAll] = useState(false);
+const Blog = () => {
   const dispatch = useDispatch();
-
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
+  const id = useParams().id;
+  const blog = useSelector((state) =>
+    state.blogs.find((blog) => blog.id === id)
+  );
+  const user = useSelector((state) => state.user);
 
   const handleDelete = () => {
     if (!window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
@@ -22,45 +23,49 @@ const Blog = ({ blog, user }) => {
     dispatch(likeBlog(blog));
   };
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
+  const addComment = (event) => {
+    event.preventDefault();
+    const comment = event.target.comment.value;
+    dispatch(commentBlog(blog, comment));
+    event.target.comment.value = "";
   };
 
+  if (!blog) return;
+
   return (
-    <div className="blog" style={blogStyle}>
-      {blog.title} {blog.author}{" "}
-      <button id="toggle-button" onClick={toggleShowAll}>
-        {showAll ? "hide" : "show"}
-      </button>
-      {showAll && (
-        <div id="blog-details">
-          <a href={blog.url}>{blog.url}</a> <br />
-          likes {blog.likes}{" "}
-          <button
-            id="like-button"
-            onClick={() =>
-              handleLike(blog.id, {
-                title: blog.title,
-                author: blog.author,
-                url: blog.url,
-                likes: blog.likes + 1,
-                user: blog.user.id,
-              })
-            }>
-            like
-          </button>
-          <br />
-          {blog.user.name}
-          <br />
-          {blog.user.username === user.username && (
-            <button onClick={handleDelete}>remove</button>
-          )}
-        </div>
-      )}
+    <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <div>
+        <LinkContainer to={blog.url}>
+          <a className="link-underline link-underline-opacity-0">{blog.url}</a>
+        </LinkContainer>
+        <br />
+        likes {blog.likes}{" "}
+        <Button size="sm" onClick={handleLike}>
+          like
+        </Button>
+        <br />
+        added by {blog.user.name}{" "}
+        {blog.user.username === user.username && (
+          <Button variant="secondary" size="sm" onClick={handleDelete}>
+            remove
+          </Button>
+        )}
+      </div>
+
+      <div>
+        <h3>comments</h3>
+        <Form onSubmit={addComment}>
+          <Form.Control type="text" name="comment"></Form.Control>
+          <Button type="submit">add comment</Button>
+        </Form>
+        <ul>
+          {blog.comments &&
+            blog.comments.map((comment) => <li key={comment}>{comment}</li>)}
+        </ul>
+      </div>
     </div>
   );
 };

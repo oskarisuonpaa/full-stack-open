@@ -3,6 +3,7 @@ import Togglable from "./Togglable";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { Button, Form } from "react-bootstrap";
 
 const BlogForm = () => {
   const [title, setTitle] = useState("");
@@ -31,36 +32,38 @@ const BlogForm = () => {
   return (
     <Togglable buttonLabel="new blog" ref={toggleableRef}>
       <h2>add a new</h2>
-      <form onSubmit={addBlog}>
-        title{" "}
-        <input
-          id="title"
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        <br />
-        author{" "}
-        <input
-          id="author"
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        <br />
-        url{" "}
-        <input
-          id="url"
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <br />
-        <button type="submit">create</button>
-      </form>
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>title</Form.Label>
+          <Form.Control
+            type="text"
+            name="title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>author</Form.Label>
+          <Form.Control
+            type="text"
+            name="author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>url</Form.Label>
+          <Form.Control
+            type="text"
+            name="url"
+            value={author}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          create
+        </Button>
+      </Form>
     </Togglable>
   );
 };

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Notification from "./Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../reducers/userReducer";
+import { Button, Form } from "react-bootstrap";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -12,9 +13,7 @@ const LoginForm = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-
     dispatch(loginUser({ username, password }));
-    window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
     setUsername("");
     setPassword("");
   };
@@ -23,29 +22,29 @@ const LoginForm = () => {
     <div>
       <h2>log in to application</h2>
       <Notification />
-      <form onSubmit={handleLogin}>
-        username{" "}
-        <input
-          id="username"
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-        <br />
-        password{" "}
-        <input
-          id="password"
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-        <br />
-        <button id="login-button" type="submit">
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>username</Form.Label>
+          <Form.Control
+            type="text"
+            name="username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>password</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
           login
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 };

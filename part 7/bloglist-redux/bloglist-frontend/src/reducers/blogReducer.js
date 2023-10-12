@@ -9,15 +9,13 @@ const slice = createSlice({
       return action.payload;
     },
     append(state, action) {
-      return state.push(action.payload);
+      state.push(action.payload);
     },
-    like(state, action) {
-      const blogToChange = action.payload;
+    update(state, action) {
+      const updateBlog = action.payload;
 
       return state.map((blog) =>
-        blog.id !== blogToChange.id
-          ? blog
-          : { ...blogToChange, likes: blogToChange.likes + 1 }
+        blog.id !== updateBlog.id ? blog : updateBlog
       );
     },
     remove(state, action) {
@@ -27,7 +25,7 @@ const slice = createSlice({
   },
 });
 
-export const { set, append, like, remove } = slice.actions;
+export const { set, append, update, remove } = slice.actions;
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -45,8 +43,12 @@ export const createBlog = (content) => {
 
 export const likeBlog = (blog) => {
   return async (dispatch) => {
-    await blogsService.update({ ...blog, likes: blog.likes + 1 });
-    dispatch(like(blog));
+    const blogToUpdate = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+    await blogsService.update(blogToUpdate);
+    dispatch(update(blogToUpdate));
   };
 };
 
@@ -54,6 +56,18 @@ export const removeBlog = (id) => {
   return async (dispatch) => {
     await blogsService.remove(id);
     dispatch(remove(id));
+  };
+};
+
+export const commentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    await blogsService.comment(blog.id, comment);
+    dispatch(
+      update({
+        ...blog,
+        comments: [...blog.comments, comment],
+      })
+    );
   };
 };
 

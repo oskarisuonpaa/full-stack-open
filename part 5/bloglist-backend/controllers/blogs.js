@@ -21,7 +21,7 @@ router.post("/", tokenExtractor, userExtractor, async (request, response) => {
   });
 
   const savedBlog = await blog.save();
-  user.blogs = user.blogs.concat(savedBlog._id);
+  user.blogs.push(savedBlog._id);
   await user.save();
 
   response.status(201).json(savedBlog);

@@ -21,7 +21,7 @@ router.post("/", tokenExtractor, userExtractor, async (request, response) => {
   });
 
   const savedBlog = await blog.save();
-  user.blogs = user.blogs.concat(savedBlog._id);
+  user.blogs.push(savedBlog._id);
   await user.save();
 
   response.status(201).json(savedBlog);
@@ -67,5 +67,21 @@ router.put("/:id", tokenExtractor, userExtractor, async (request, response) => {
 
   response.json(updatedBlog);
 });
+
+router.post(
+  "/:id/comments",
+  tokenExtractor,
+  userExtractor,
+  async (request, response) => {
+    const { id } = request.params;
+    const { comment } = request.body;
+
+    const blog = await Blog.findById(id);
+    blog.comments.push(comment);
+    await blog.save();
+
+    response.json(blog);
+  }
+);
 
 module.exports = router;
