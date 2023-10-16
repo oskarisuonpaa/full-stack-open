@@ -1,4 +1,4 @@
-# fullstack-open
+# full-stack-open
 
 This repository contains all of my completed exercises of the full stack course from [Full stack open](https://www.fullstackopen.com) online course.
 
