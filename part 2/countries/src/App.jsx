@@ -6,14 +6,14 @@ import weatherService from "./services/weather";
 const Countries = ({ countries, setFilter }) => {
   if (countries.length > 10)
     return <p>Too many matches, specify another filter.</p>;
-  else if (countries.length === 1) return <Country country={countries[0]} />;
-  else
-    return countries.map((country) => (
-      <p key={country.name.common}>
-        {country.name.common}{" "}
-        <button onClick={() => setFilter(country.name.common)}>show</button>
-      </p>
-    ));
+  if (countries.length === 1) return <Country country={countries[0]} />;
+
+  return countries.map((country) => (
+    <p key={country.name.common}>
+      {country.name.common}{" "}
+      <button onClick={() => setFilter(country.name.common)}>show</button>
+    </p>
+  ));
 };
 
 const Country = ({ country }) => {

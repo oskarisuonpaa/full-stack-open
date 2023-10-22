@@ -7,7 +7,9 @@ router.post("/", async (request, response) => {
 
   if (!password) {
     return response.status(400).send({ error: "password required" });
-  } else if (password.length < 3) {
+  }
+
+  if (password.length < 3) {
     return response
       .status(400)
       .send({ error: "password has to be atleast 3 characters long" });

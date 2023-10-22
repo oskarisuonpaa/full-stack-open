@@ -25,14 +25,6 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
-const nonExistingId = async () => {
-  const note = new Note({ content: "willremovethissoon" });
-  await note.save();
-  await note.deleteOne();
-
-  return note._id.toString();
-};
-
 const initialUsers = [{ username: "tester", password: "secret" }];
 
 const usersInDb = async () => {

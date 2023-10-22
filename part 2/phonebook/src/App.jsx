@@ -67,7 +67,7 @@ const App = () => {
   const updatePerson = (person) => {
     if (
       !window.confirm(
-        `${newName} is already added to phonbook, replace the old number with a new one?`
+        `${newName} is already added to phonebook, replace the old number with a new one?`
       )
     )
       return;
@@ -102,7 +102,6 @@ const App = () => {
 
   const notify = (message, type = "success") => {
     setNotification({ type, message });
-    console.log(notification);
 
     setTimeout(() => {
       setNotification({ type: "", message: "" });

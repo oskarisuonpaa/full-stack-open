@@ -20,15 +20,13 @@ router.post("/", async (request, response) => {
   }
 
   const userForToken = {
-    username: user.username,
+    username,
     id: user._id,
   };
 
   const token = jwt.sign(userForToken, config.SECRET, { expiresIn: 60 * 60 });
 
-  response
-    .status(200)
-    .send({ token, username: user.username, name: user.name });
+  response.status(200).send({ token, username, name: user.name });
 });
 
 module.exports = router;

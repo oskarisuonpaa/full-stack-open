@@ -10,6 +10,10 @@ const BlogForm = ({ createBlog }) => {
   const addBlog = async (event) => {
     event.preventDefault();
     createBlog({ title, author, url });
+    clearForm();
+  };
+
+  const clearForm = () => {
     setTitle("");
     setAuthor("");
     setUrl("");

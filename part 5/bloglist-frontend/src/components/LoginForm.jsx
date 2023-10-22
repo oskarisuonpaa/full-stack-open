@@ -17,11 +17,16 @@ const LoginForm = ({ notify, notification, user, setUser }) => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      setUsername("");
-      setPassword("");
+
+      clearForm();
     } catch (exception) {
       notify("wrong username or password", "error");
     }
+  };
+
+  const clearForm = () => {
+    setUsername("");
+    setPassword("");
   };
 
   return (

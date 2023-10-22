@@ -9,19 +9,15 @@ router.get("/", async (request, response) => {
 });
 
 router.post("/", tokenExtractor, userExtractor, async (request, response) => {
-  const user = request.user;
-
-  const { title, author, url } = request.body;
+  const { user } = request;
 
   const blog = new Blog({
-    title,
-    author,
-    url,
+    ...request.body,
     user: user._id,
   });
 
   const savedBlog = await blog.save();
-  user.blogs.push(savedBlog._id);
+  user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
   response.status(201).json(savedBlog);
@@ -32,9 +28,10 @@ router.delete(
   tokenExtractor,
   userExtractor,
   async (request, response) => {
-    const user = request.user;
+    const { user } = request;
+    const { id } = request.params;
 
-    const blog = await Blog.findById(request.params.id);
+    const blog = await Blog.findById(id);
 
     if (!user && blog.user.toString() !== user._id.toString()) {
       return response.send(401).json({ error: "operation not permitted" });
@@ -52,14 +49,7 @@ router.delete(
 );
 
 router.put("/:id", tokenExtractor, userExtractor, async (request, response) => {
-  const { title, author, url, likes } = request.body;
-
-  const blog = {
-    title,
-    author,
-    url,
-    likes,
-  };
+  const blog = request.body;
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,

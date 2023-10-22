@@ -81,7 +81,7 @@ const App = () => {
             person.id !== updatedPerson.id ? person : updatedPerson
           )
         );
-        notify(`Updated phone number of ${newName}`);
+        notify(`Updated phonenumber of ${newName}`);
       })
       .catch((error) => {
         notify(error.response.data.error, "error");

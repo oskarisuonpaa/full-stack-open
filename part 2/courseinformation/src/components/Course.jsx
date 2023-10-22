@@ -7,7 +7,7 @@ const Part = ({ part }) => (
 );
 
 const Content = ({ parts }) => {
-  if (parts.lenght === 0) return <></>;
+  if (parts.lenght === 0) return;
 
   return (
     <ul>

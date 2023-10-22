@@ -19,6 +19,10 @@ const AnecdoteForm = () => {
   const onCreate = (event) => {
     event.preventDefault();
     const content = event.target.anecdote.value;
+    if (content.length < 5) {
+      notify("too short anecdote, must have length 5 or more");
+      return;
+    }
     event.target.anecdote.value = "";
     newAnecdoteMutation.mutate({ content, votes: 0 });
   };
